@@ -1,43 +1,11 @@
 // Test ID: IIDSAT
 
+import { useLoaderData } from "react-router-dom";
 import { calcMinutesLeft, formatDate } from "../../utils/helpers";
 
-const order = {
-  id: "ABCDEF",
-  customer: "معراج",
-  phone: "09919391440",
-  address: "البرز - کرج - جهانشهر",
-  priority: true,
-  estimatedDelivery: "2027-04-25T10:00:00",
-  cart: [
-    {
-      pizzaId: 7,
-      name: "ناپولی",
-      quantity: 3,
-      unitPrice: 16,
-      totalPrice: 48,
-    },
-    {
-      pizzaId: 5,
-      name: "شیکاگو",
-      quantity: 2,
-      unitPrice: 16,
-      totalPrice: 32,
-    },
-    {
-      pizzaId: 3,
-      name: "نیویورک",
-      quantity: 1,
-      unitPrice: 15,
-      totalPrice: 15,
-    },
-  ],
-  position: "35.840,51.010",
-  orderPrice: 95,
-  priorityPrice: 19,
-};
-
 function Order() {
+  const order = useLoaderData();
+
   const {
     // id,
     status,
