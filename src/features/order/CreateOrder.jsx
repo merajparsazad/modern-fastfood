@@ -1,9 +1,6 @@
 // import { useState } from "react";
 
-// const isValidPhone = (str) =>
-//   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
-//     str
-//   );
+import { Form, useActionData, useNavigation } from "react-router-dom";
 
 const fakeCart = [
   {
@@ -30,6 +27,11 @@ const fakeCart = [
 ];
 
 function CreateOrder() {
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
+  const formErrors = useActionData();
+
   // const [withPriority, setWithPriority] = useState(false);
   const cart = fakeCart;
   console.log(cart);
@@ -38,7 +40,8 @@ function CreateOrder() {
     <div>
       <h2>میخوای سفارش بدی؟ بزن بریم!</h2>
 
-      <form>
+      {/* <Form method="POST" action="/order/new"> */}
+      <Form method="POST">
         <div>
           <label>اسم</label>
           <input type="text" name="customer" required />
@@ -49,6 +52,7 @@ function CreateOrder() {
           <div>
             <input type="tel" name="phone" required />
           </div>
+          {formErrors?.phone && <p>{formErrors.phone}</p>}
         </div>
 
         <div>
@@ -70,9 +74,13 @@ function CreateOrder() {
         </div>
 
         <div>
-          <button>سفارش</button>
+          {/* ارسال اطلاعات cart با فرمت جیسون به سرور */}
+          <input type="hidden" name="cart" value={JSON.stringify(cart)} />
+          <button disabled={isSubmitting}>
+            {isSubmitting ? "در حال سفارش..." : "سفارش"}
+          </button>
         </div>
-      </form>
+      </Form>
     </div>
   );
 }
