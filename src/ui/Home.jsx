@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import CreateUser from "../features/user/CreateUser";
 import media from "../utils/media-queries";
+import { useSelector } from "react-redux";
+import Button from "./Button";
 
 const StyledHome = styled.div`
   margin: 40px 0;
@@ -27,6 +29,8 @@ const Title = styled.h1`
 `;
 
 function Home() {
+  const username = useSelector((state) => state.user.username);
+
   return (
     <StyledHome>
       <Title>
@@ -35,7 +39,11 @@ function Home() {
         <span>داغِ داغ، رسیده دمِ دستتون</span>
       </Title>
 
-      <CreateUser />
+      {username === "" ? (
+        <CreateUser />
+      ) : (
+        <Button to="/menu">ادامه سفارش، {username}</Button>
+      )}
     </StyledHome>
   );
 }

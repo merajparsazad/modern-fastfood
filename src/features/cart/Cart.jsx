@@ -2,6 +2,7 @@ import LinkButton from "../../ui/LinkButton";
 import Button from "../../ui/Button";
 import styled from "styled-components";
 import CartItem from "./CartItem";
+import { useSelector } from "react-redux";
 
 const fakeCart = [
   {
@@ -48,6 +49,7 @@ const StyledCart = styled.div`
 `;
 
 function Cart() {
+  const username = useSelector((state) => state.user.username);
   const cart = fakeCart;
   console.log(cart);
 
@@ -55,7 +57,7 @@ function Cart() {
     <StyledCart>
       <LinkButton to="/menu">&larr; برگشت به منو</LinkButton>
 
-      <h2>سبد خرید, اسم یوزر</h2>
+      <h2>سبد خرید, {username}</h2>
 
       <ul>
         {cart.map((item) => (

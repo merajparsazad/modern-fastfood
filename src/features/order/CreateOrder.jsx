@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Input from "../../ui/Input";
 import Button from "../../ui/Button";
 import media from "../../utils/media-queries";
+import { useSelector } from "react-redux";
 
 const fakeCart = [
   {
@@ -100,6 +101,7 @@ const Checkbox = styled.input`
 `;
 
 function CreateOrder() {
+  const username = useSelector((state) => state.user.username);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
@@ -118,7 +120,12 @@ function CreateOrder() {
         <div>
           <label>اسم</label>
           <div>
-            <Input type="text" name="customer" required />
+            <Input
+              type="text"
+              name="customer"
+              defaultValue={username}
+              required
+            />
           </div>
         </div>
 

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import media from "../../utils/media-queries";
+import { useSelector } from "react-redux";
 
 const StyledUsername = styled.div`
   display: none;
@@ -12,7 +13,11 @@ const StyledUsername = styled.div`
 `;
 
 function Username() {
-  return <StyledUsername>معراج</StyledUsername>;
+  const username = useSelector((state) => state.user.username);
+
+  if (!username) return null;
+
+  return <StyledUsername>{username}</StyledUsername>;
 }
 
 export default Username;
