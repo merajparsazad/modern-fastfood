@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import Button from "../../ui/Button";
+import { useDispatch } from "react-redux";
+import { addItem } from "../cart/cartSlice";
 
 const StyledMenuItem = styled.li`
   display: flex;
@@ -47,14 +49,21 @@ const Img = styled.img`
 `;
 
 function MenuItem({ pizza }) {
-  const {
-    // id,
-    name,
-    unitPrice,
-    ingredients,
-    soldOut,
-    imageUrl,
-  } = pizza;
+  const dispatch = useDispatch();
+
+  const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
+
+  function handleAddToCart() {
+    const newItem = {
+      pizzaId: id,
+      name,
+      quantity: 1,
+      unitPrice,
+      totalPrice: unitPrice * 1,
+    };
+
+    dispatch(addItem(newItem));
+  }
 
   return (
     <StyledMenuItem>
@@ -64,7 +73,11 @@ function MenuItem({ pizza }) {
         <p>{ingredients.join(", ")}</p>
         <div>
           {!soldOut ? <p>{unitPrice}</p> : <p>اتمام موجودی</p>}
-          <Button type="small">اضافه به سبد</Button>
+          {!soldOut && (
+            <Button type="small" onClick={handleAddToCart}>
+              اضافه به سبد
+            </Button>
+          )}
         </div>
       </div>
     </StyledMenuItem>

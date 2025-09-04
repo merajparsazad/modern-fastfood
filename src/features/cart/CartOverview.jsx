@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import media from "../../utils/media-queries";
+import { useSelector } from "react-redux";
+import { getTotalCartPrice, getTotalCartQuantity } from "./cartSlice";
 
 const StyledCartOverview = styled.div`
   display: flex;
@@ -35,11 +37,16 @@ const StyledCartOverview = styled.div`
 `;
 
 function CartOverview() {
+  const totalCartQuantity = useSelector(getTotalCartQuantity);
+  const totalCartPrice = useSelector(getTotalCartPrice);
+
+  if (!totalCartQuantity) return null;
+
   return (
     <StyledCartOverview>
       <p>
-        <span>23 پیتزا</span>
-        <span>$23.23</span>
+        <span>{totalCartQuantity} پیتزا</span>
+        <span>${totalCartPrice}</span>
       </p>
       <Link to="/cart">سبد خرید &rarr;</Link>
     </StyledCartOverview>

@@ -2,31 +2,9 @@ import LinkButton from "../../ui/LinkButton";
 import Button from "../../ui/Button";
 import styled from "styled-components";
 import CartItem from "./CartItem";
-import { useSelector } from "react-redux";
-
-const fakeCart = [
-  {
-    pizzaId: 12,
-    name: "مدیترانه‌ای",
-    quantity: 2,
-    unitPrice: 16,
-    totalPrice: 32,
-  },
-  {
-    pizzaId: 6,
-    name: "سبزیجات",
-    quantity: 1,
-    unitPrice: 13,
-    totalPrice: 13,
-  },
-  {
-    pizzaId: 11,
-    name: "قارچ و اسفناج",
-    quantity: 1,
-    unitPrice: 15,
-    totalPrice: 15,
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { clearCart } from "./cartSlice";
+import EmptyCart from "./EmptyCart";
 
 const StyledCart = styled.div`
   padding: 16px 12px;
@@ -50,8 +28,10 @@ const StyledCart = styled.div`
 
 function Cart() {
   const username = useSelector((state) => state.user.username);
-  const cart = fakeCart;
-  console.log(cart);
+  const cart = useSelector((state) => state.cart.cart);
+  const dispatch = useDispatch();
+
+  if (!cart.length) return <EmptyCart />;
 
   return (
     <StyledCart>
@@ -67,7 +47,9 @@ function Cart() {
 
       <div>
         <Button to="/order/new">سفارش</Button>
-        <Button type="secondary">پاک کردن</Button>
+        <Button type="secondary" onClick={() => dispatch(clearCart())}>
+          پاک کردن
+        </Button>
       </div>
     </StyledCart>
   );

@@ -50,7 +50,7 @@ function CartItem({ item }) {
         {quantity}&times; {name}
       </p>
       <div>
-        <p>{totalPrice}</p>
+        <p>${totalPrice}</p>
         <Button type="small">حذف</Button>
       </div>
     </StyledCartItem>
