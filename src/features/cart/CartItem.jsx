@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Button from "../../ui/Button";
 import media from "../../utils/media-queries";
+import DeleteItem from "./DeleteItem";
 
 const StyledCartItem = styled.li`
   border-bottom: 1px solid var(--color-stone-200);
@@ -37,12 +37,7 @@ const StyledCartItem = styled.li`
 `;
 
 function CartItem({ item }) {
-  const {
-    // pizzaId,
-    name,
-    quantity,
-    totalPrice,
-  } = item;
+  const { pizzaId, name, quantity, totalPrice } = item;
 
   return (
     <StyledCartItem>
@@ -51,7 +46,7 @@ function CartItem({ item }) {
       </p>
       <div>
         <p>${totalPrice}</p>
-        <Button type="small">حذف</Button>
+        <DeleteItem pizzaId={pizzaId} />
       </div>
     </StyledCartItem>
   );

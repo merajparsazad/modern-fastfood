@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import Button from "../../ui/Button";
-import { useDispatch } from "react-redux";
-import { addItem } from "../cart/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem, getCurrentQuantityById } from "../cart/cartSlice";
+import DeleteItem from "../cart/DeleteItem";
 
 const StyledMenuItem = styled.li`
   display: flex;
@@ -53,6 +54,9 @@ function MenuItem({ pizza }) {
 
   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
 
+  const currentQuantity = useSelector(getCurrentQuantityById(id));
+  const isInCart = currentQuantity > 0;
+
   function handleAddToCart() {
     const newItem = {
       pizzaId: id,
@@ -73,7 +77,10 @@ function MenuItem({ pizza }) {
         <p>{ingredients.join(", ")}</p>
         <div>
           {!soldOut ? <p>{unitPrice}</p> : <p>اتمام موجودی</p>}
-          {!soldOut && (
+
+          {isInCart && <DeleteItem pizzaId={id} />}
+
+          {!soldOut && !isInCart && (
             <Button type="small" onClick={handleAddToCart}>
               اضافه به سبد
             </Button>
