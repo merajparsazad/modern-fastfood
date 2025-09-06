@@ -1,4 +1,4 @@
-// import { useState } from "react";
+import { useState } from "react";
 
 import { Form, useActionData, useNavigation } from "react-router-dom";
 import styled from "styled-components";
@@ -6,30 +6,8 @@ import Input from "../../ui/Input";
 import Button from "../../ui/Button";
 import media from "../../utils/media-queries";
 import { useSelector } from "react-redux";
-
-const fakeCart = [
-  {
-    pizzaId: 12,
-    name: "مدیترانه‌ای",
-    quantity: 2,
-    unitPrice: 16,
-    totalPrice: 32,
-  },
-  {
-    pizzaId: 6,
-    name: "سبزیجات",
-    quantity: 1,
-    unitPrice: 13,
-    totalPrice: 13,
-  },
-  {
-    pizzaId: 11,
-    name: "قارچ و اسفناج",
-    quantity: 1,
-    unitPrice: 15,
-    totalPrice: 15,
-  },
-];
+import EmptyCart from "../cart/EmptyCart";
+import { getTotalCartPrice } from "../cart/cartSlice";
 
 const StyledCreateOrder = styled.div`
   padding: 24px 16px;
@@ -107,9 +85,13 @@ function CreateOrder() {
 
   const formErrors = useActionData();
 
-  // const [withPriority, setWithPriority] = useState(false);
-  const cart = fakeCart;
-  console.log(cart);
+  const [withPriority, setWithPriority] = useState(false);
+  const cart = useSelector((state) => state.cart.cart);
+  const totalCartPrice = useSelector(getTotalCartPrice);
+  const priorityPrice = withPriority ? totalCartPrice * 0.2 : 0;
+  const totalPrice = totalCartPrice + priorityPrice;
+
+  if (!cart.length) return <EmptyCart />;
 
   return (
     <StyledCreateOrder>
@@ -149,8 +131,8 @@ function CreateOrder() {
             type="checkbox"
             name="priority"
             id="priority"
-            // value={withPriority}
-            // onChange={(e) => setWithPriority(e.target.checked)}
+            value={withPriority}
+            onChange={(e) => setWithPriority(e.target.checked)}
           />
           <label htmlFor="priority">میخوای سفارشت تو اولویت باشه؟</label>
         </div>
@@ -159,7 +141,7 @@ function CreateOrder() {
           {/* ارسال اطلاعات cart با فرمت جیسون به سرور */}
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
           <Button disabled={isSubmitting}>
-            {isSubmitting ? "در حال سفارش..." : "سفارش"}
+            {isSubmitting ? "در حال سفارش..." : `سفارش - ${totalPrice}$`}
           </Button>
         </div>
       </StyledForm>

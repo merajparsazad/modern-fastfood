@@ -1,5 +1,7 @@
 import { redirect } from "react-router-dom";
 import { createOrder } from "../services/apiRestaurant";
+import store from "../store";
+import { clearCart } from "../features/cart/cartSlice";
 
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
@@ -13,7 +15,7 @@ export async function createOrderAction({ request }) {
   const order = {
     ...data,
     cart: JSON.parse(data.cart),
-    priority: data.priority === "on",
+    priority: data.priority === "true",
   };
 
   const errors = {};
@@ -23,6 +25,9 @@ export async function createOrderAction({ request }) {
   if (Object.keys(errors).length > 0) return errors;
 
   const newOrder = await createOrder(order);
+
+  // Clear cart after ordering complete
+  store.dispatch(clearCart());
 
   return redirect(`/order/${newOrder.id}`);
 }
