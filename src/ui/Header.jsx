@@ -20,7 +20,7 @@ const Heading = styled.header`
 function Header() {
   return (
     <Heading>
-      <Link to="/">منو فستفود</Link>
+      <Link to="/">صفحه اصلی</Link>
 
       <SearchOrder />
 

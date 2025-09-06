@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 const StyledMenu = styled.ul`
   padding: 0 8px;
+  direction: ltr;
 `;
 
 function Menu() {

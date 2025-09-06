@@ -13,7 +13,7 @@ const StyledCartOverview = styled.div`
   font-size: 14px;
 
   ${media.sm`
-  padding: 24px 0;
+  padding: 24px;
   `}
 
   ${media.md`

@@ -18,6 +18,10 @@ const StyledOrder = styled.div`
     font-weight: 500;
   }
 
+  & ul {
+    direction: ltr;
+  }
+
   & > div:first-child {
     display: flex;
     align-items: center;

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import media from "../../utils/media-queries";
 
 const Input = styled.input`
-  width: 110px;
+  width: 150px;
   border-radius: 9999px;
   padding: 8px 16px;
   font-size: 14px;
