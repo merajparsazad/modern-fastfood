@@ -52,6 +52,16 @@ const types = {
   `}
   `,
 
+  round: css`
+    padding: 6px 10px;
+    font-size: 12px;
+
+    ${media.md`
+    padding: 10px 14px;
+    font-size: 14px;
+  `}
+  `,
+
   secondary: css`
     padding: 8px 12px;
     font-size: 14px;

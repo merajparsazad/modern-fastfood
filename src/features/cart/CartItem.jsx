@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import media from "../../utils/media-queries";
 import DeleteItem from "./DeleteItem";
+import UpdateItemQuantity from "./UpdateItemQuantity";
+import { useSelector } from "react-redux";
+import { getCurrentQuantityById } from "./cartSlice";
 
 const StyledCartItem = styled.li`
   border-bottom: 1px solid var(--color-stone-200);
@@ -39,6 +42,8 @@ const StyledCartItem = styled.li`
 function CartItem({ item }) {
   const { pizzaId, name, quantity, totalPrice } = item;
 
+  const currentQuantity = useSelector(getCurrentQuantityById(pizzaId));
+
   return (
     <StyledCartItem>
       <p>
@@ -46,6 +51,10 @@ function CartItem({ item }) {
       </p>
       <div>
         <p>${totalPrice}</p>
+        <UpdateItemQuantity
+          pizzaId={pizzaId}
+          currentQuantity={currentQuantity}
+        />
         <DeleteItem pizzaId={pizzaId} />
       </div>
     </StyledCartItem>

@@ -3,6 +3,7 @@ import Button from "../../ui/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem, getCurrentQuantityById } from "../cart/cartSlice";
 import DeleteItem from "../cart/DeleteItem";
+import UpdateItemQuantity from "../cart/UpdateItemQuantity";
 
 const StyledMenuItem = styled.li`
   display: flex;
@@ -37,6 +38,12 @@ const StyledMenuItem = styled.li`
         font-size: 14px;
         font-weight: 500;
         color: var(--color-stone-500);
+      }
+
+      & div {
+        display: flex;
+        align-items: center;
+        gap: 12px;
       }
     }
   }
@@ -76,9 +83,17 @@ function MenuItem({ pizza }) {
         <p>{name}</p>
         <p>{ingredients.join(", ")}</p>
         <div>
-          {!soldOut ? <p>{unitPrice}</p> : <p>اتمام موجودی</p>}
+          {!soldOut ? <p>${unitPrice}</p> : <p>اتمام موجودی</p>}
 
-          {isInCart && <DeleteItem pizzaId={id} />}
+          {isInCart && (
+            <div>
+              <UpdateItemQuantity
+                pizzaId={id}
+                currentQuantity={currentQuantity}
+              />
+              <DeleteItem pizzaId={id} />
+            </div>
+          )}
 
           {!soldOut && !isInCart && (
             <Button type="small" onClick={handleAddToCart}>
