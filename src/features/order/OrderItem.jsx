@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
 const StyledOrderItem = styled.li`
+  display: flex;
+  flex-direction: column;
+  gap: 4px 0;
   border-bottom: 1px solid var(--color-stone-200);
   padding: 12px 0;
 
@@ -21,9 +24,16 @@ const StyledOrderItem = styled.li`
       font-weight: 500;
     }
   }
+
+  & > p {
+    font-size: 14px;
+    font-style: italic;
+    color: var(--color-stone-500);
+    text-transform: capitalize;
+  }
 `;
 
-function OrderItem({ item }) {
+function OrderItem({ item, isLoadingIngredients, ingredients }) {
   const { quantity, name, totalPrice } = item;
 
   return (
@@ -34,6 +44,7 @@ function OrderItem({ item }) {
         </p>
         <p>${totalPrice}</p>
       </div>
+      <p>{isLoadingIngredients ? "Loading..." : ingredients.join(", ")}</p>
     </StyledOrderItem>
   );
 }

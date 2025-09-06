@@ -1,5 +1,5 @@
 import { redirect } from "react-router-dom";
-import { createOrder } from "../services/apiRestaurant";
+import { createOrder, updateOrder } from "../services/apiRestaurant";
 import store from "../store";
 import { clearCart } from "../features/cart/cartSlice";
 
@@ -30,4 +30,10 @@ export async function createOrderAction({ request }) {
   store.dispatch(clearCart());
 
   return redirect(`/order/${newOrder.id}`);
+}
+
+export async function updateOrderAction({ params }) {
+  const data = { priority: true };
+  await updateOrder(params.orderId, data);
+  return null;
 }

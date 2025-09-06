@@ -1,9 +1,11 @@
 // Test ID: IIDSAT
 
-import { useLoaderData } from "react-router-dom";
+import { useFetcher, useLoaderData } from "react-router-dom";
 import { calcMinutesLeft, formatDate } from "../../utils/helpers";
 import styled from "styled-components";
 import OrderItem from "./OrderItem";
+import { useEffect } from "react";
+import UpdateOrder from "./UpdateOrder";
 
 const StyledOrder = styled.div`
   padding: 24px 16px;
@@ -88,6 +90,15 @@ const StyledOrder = styled.div`
 function Order() {
   const order = useLoaderData();
 
+  const fetcher = useFetcher();
+
+  useEffect(
+    function () {
+      if (!fetcher.data && fetcher.state === "idle") fetcher.load("/menu");
+    },
+    [fetcher]
+  );
+
   const {
     id,
     status,
@@ -121,7 +132,15 @@ function Order() {
 
       <ul>
         {cart.map((item) => (
-          <OrderItem item={item} key={item.pizzaId} />
+          <OrderItem
+            item={item}
+            key={item.pizzaId}
+            isLoadingIngredients={fetcher.state === "loading"}
+            ingredients={
+              fetcher?.data?.find((el) => el.id === item.pizzaId)
+                ?.ingredients ?? []
+            }
+          />
         ))}
       </ul>
 
@@ -130,6 +149,7 @@ function Order() {
         {priority && <p>بهای اولویت: {priorityPrice}$</p>}
         <p>بهای تمام شده: {orderPrice + priorityPrice}$</p>
       </div>
+      {!priority && <UpdateOrder />}
     </StyledOrder>
   );
 }
