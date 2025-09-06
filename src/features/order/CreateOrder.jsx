@@ -5,9 +5,10 @@ import styled from "styled-components";
 import Input from "../../ui/Input";
 import Button from "../../ui/Button";
 import media from "../../utils/media-queries";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import EmptyCart from "../cart/EmptyCart";
 import { getTotalCartPrice } from "../cart/cartSlice";
+import { fetchAddress } from "../user/userSlice";
 
 const StyledCreateOrder = styled.div`
   padding: 24px 16px;
@@ -51,6 +52,27 @@ const StyledForm = styled(Form)`
     }
   }
 
+  & > div:nth-child(3) {
+    position: relative;
+
+    & span {
+      position: absolute;
+      width: auto;
+      top: 3px;
+      left: 4px;
+      z-index: 99;
+
+      ${media.md`
+        top: 5px;
+        left: 6px;
+      `}
+
+      & button {
+        background-color: transparent;
+      }
+    }
+  }
+
   & > div:nth-child(4) {
     align-items: center;
     flex-direction: row;
@@ -79,9 +101,17 @@ const Checkbox = styled.input`
 `;
 
 function CreateOrder() {
-  const username = useSelector((state) => state.user.username);
+  const {
+    username,
+    status: addressStatus,
+    position,
+    address,
+    error: errorAddress,
+  } = useSelector((state) => state.user);
+  const isLoadingAddress = addressStatus === "loading";
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
+  const dispatch = useDispatch();
 
   const formErrors = useActionData();
 
@@ -122,8 +152,43 @@ function CreateOrder() {
         <div>
           <label>ادرس</label>
           <div>
-            <Input type="text" name="address" required />
+            <Input
+              type="text"
+              name="address"
+              disabled={isLoadingAddress}
+              defaultValue={address}
+              required
+            />
+            {addressStatus === "error" && <p>{errorAddress}</p>}
           </div>
+
+          {!position.latitude && !position.longitude && (
+            <span>
+              <Button
+                type="icon"
+                disabled={isLoadingAddress}
+                onClick={(e) => {
+                  e.preventDefault();
+                  dispatch(fetchAddress());
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="30"
+                  height="30"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="10" r="3"></circle>
+                  <path d="M12 22s7-7.2 7-12.2A7 7 0 0 0 5 9.8C5 14.8 12 22 12 22z"></path>
+                </svg>
+              </Button>
+            </span>
+          )}
         </div>
 
         <div>
@@ -140,7 +205,16 @@ function CreateOrder() {
         <div>
           {/* ارسال اطلاعات cart با فرمت جیسون به سرور */}
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-          <Button disabled={isSubmitting}>
+          <input
+            type="hidden"
+            name="position"
+            value={
+              position.longitude && position.latitude
+                ? `${position.latitude},${position.longitude}`
+                : ""
+            }
+          />
+          <Button disabled={isSubmitting || isLoadingAddress}>
             {isSubmitting ? "در حال سفارش..." : `سفارش - ${totalPrice}$`}
           </Button>
         </div>
